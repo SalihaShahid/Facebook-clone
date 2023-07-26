@@ -399,3 +399,13 @@ def view_media_likes(request,id):
 
 
 
+def update_profile(request):
+	email=request.session.get('user_email')
+	user=User.objects.get(email=email)
+	if request.method=='POST':
+		name=request.POST.get('name')
+		user.name=name
+		user.save()
+
+	return redirect('view_user_profile',email)
+

@@ -28,6 +28,7 @@ path("view_media_comments<int:id>",view_media_comments,name="view_media_comments
 path("view_text_likes<int:id>",view_text_likes,name="view_text_likes"),
 path("view_media_likes<int:id>",view_media_likes,name="view_media_likes"),
 path("view_user_profile<str:email>",view_user_profile,name="view_user_profile"),
+path("update_profile",update_profile,name="update_profile"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

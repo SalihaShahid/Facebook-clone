@@ -50,3 +50,4 @@ class MediaPostForm(forms.Form):
 
 class CommentForm(forms.Form):
     comment=forms.CharField()
+
