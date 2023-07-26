@@ -31,14 +31,15 @@
         <a class="nav-link" href="{%url 'logout'%}" style="color:white;">Logout</a>
       </li>
     </ul>
+    <img src="{{user.profile_picture.url}}" style="width:45px;height:45px;border-radius:30px;" onclick="window.location.href='{% url 'view_user_profile' user.email%}'" />
   </div>
 </nav>
 <h1 class="text-center">Home</h1>
 {%for post in combined_posts %}
 {%if post in text_posts%}
-<div class="card" style="width: 18rem;margin-left: 39%;">
+<div class="card" style="width: 40rem;margin-left: 27%;">
   <div class="card-body">
-    <h3><b>{{post.author.name}}</b></h3>
+    <h5><img src="{{post.author.profile_picture.url}}" style="width: 50px;height: 50px;border-radius:30px;margin-right: 20px;"/><b>{{post.author.name}}</b></h5><hr>
   <p>{{post.content}}</p>
   <label style="font-style: oblique;">{{post.time}}</label>
   <div>
@@ -52,14 +53,16 @@
   </div>
   {%else%}
 
-<div class="card" style="width: 18rem;margin-left: 39%;">
-  <h3><b>{{post.author.name}}</b></h3>
-  
+<div class="card" style="width: 40rem;margin-left: 27%;">
+  <h5 style="padding:20px"><img src="{{post.author.profile_picture.url}}" style="width: 50px;height: 50px;border-radius:30px;margin-right: 20px;"/><b>{{post.author.name}}</b></h5>
+  {%if '.jpg' in post.content.url or '.jpeg' in post.content.url or '.png' in post.content.url%}
   <img class="card-img-top" src="{{post.content.url}}">
-  
+  {%else%}
   <video>
-  <source class="card-img-top" src="{{post.content.url}}">
+
+  <source src="{{post.content.url}}">
   </video>
+  {%endif%}
   <div class="card-body">
     <h5 class="card-title">{{post.author.name}}</h5>
     <p class="card-text">{{post.caption}}</p>
@@ -72,5 +75,7 @@
 </div>
 {%endif%}
 {%endfor%}
+
+
 </body>
 </html>

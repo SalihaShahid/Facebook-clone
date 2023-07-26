@@ -39,10 +39,7 @@ class Message(models.Model):
 	receiver=models.EmailField()
 	message=models.TextField()
 	time = models.DateTimeField()
-	def save(self,*args, **kwargs):
-		if not self.time:
-			self.time = timezone.now()
-		super(Message, self).save(*args, **kwargs)
+	
 
 
 class TextPost(models.Model):
@@ -51,22 +48,16 @@ class TextPost(models.Model):
 	time = models.DateTimeField()
 	comments=GenericRelation('TextPostComment')
 	likes=GenericRelation('TextLike')
-	def save(self,*args, **kwargs):
-		if not self.time:
-			self.time = timezone.now()
-		super(TextPost, self).save(*args, **kwargs)
+	
 
 class MediaPost(models.Model):
 	author=models.ForeignKey(User,on_delete=models.CASCADE)
 	content=models.FileField(upload_to='media/posts/',validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png','gif','mp4'])])
 	caption=models.TextField(default="")
-	time = models.DateTimeField(auto_now=True)
+	time = models.DateTimeField()
 	comments=GenericRelation('MediaPostComment')
 	likes=GenericRelation('MediaLike')
-	def save(self,*args, **kwargs):
-		if not self.time:
-			self.time = timezone.now()
-		super(MediaPost, self).save(*args, **kwargs)
+	
 
 
 class TextPostComment(models.Model):
@@ -75,7 +66,7 @@ class TextPostComment(models.Model):
 	comment=models.TextField()
 	content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE)
 	object_id=models.PositiveIntegerField()
-	time = models.DateTimeField(auto_now=True)
+	time = models.DateTimeField()
 	content_object = GenericForeignKey('content_type','object_id')
 
 class MediaPostComment(models.Model):
@@ -84,7 +75,7 @@ class MediaPostComment(models.Model):
 	comment=models.TextField()
 	content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE)
 	object_id=models.PositiveIntegerField()
-	time = models.DateTimeField(auto_now=True)
+	time = models.DateTimeField()
 	content_object = GenericForeignKey('content_type','object_id')
 
 

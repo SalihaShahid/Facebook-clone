@@ -34,6 +34,7 @@
         <a class="nav-link" href="{%url 'logout'%}" style="color:white;">Logout</a>
       </li>
     </ul>
+    <img src="{{user.profile_picture.url}}" style="width:45px;height:45px;border-radius:30px;" onclick="window.location.href='{% url 'view_user_profile' user.email%}'" />
   </div>
 </nav>
 <h2 class="text-center">Pending Requests</h2>

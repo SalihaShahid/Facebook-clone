@@ -7,6 +7,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<title>Facebook-Chat</title>
 </head>
 <body style="background-color: #DDDDE6;">
@@ -14,9 +15,11 @@
 
 <div style="width:100%;height:100%; background-color:#211CA8;margin-bottom: 10px;">
   <div style="padding:10px;">
-    <h3 style="color:white;"><img src="{{friend.profile_picture.url}}"style="border-radius: 50px; padding-right: 4px; height:70px;width: 70px;margin-left: 2%; margin-right: 2%">{{friend.name}}</h3>
+    <h3 style="color:white;"><img src="{{friend.profile_picture.url}}"style="border-radius: 50px; padding-right: 4px; height:70px;width: 70px;margin-left: 2%; margin-right: 2%" onclick="window.location.href='{% url 'view_profile' friend.email%}'"/>
+    {{friend.name}} <i class="fa fa-close" style="color:white;margin-left: 75%;" onclick="window.location.href='{%url 'home'%}'"></i></h3>
     
   </div>
+
   </div>
   {%for message in messages%}
   {%if message in sent%}

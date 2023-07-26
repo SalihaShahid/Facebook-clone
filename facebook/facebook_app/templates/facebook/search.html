@@ -40,6 +40,7 @@
       {{form|crispy}}}
       <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
     </form>
+    <img src="{{user.profile_picture.url}}" style="width:45px;height:45px;border-radius:30px;margin-left: 20px" onclick="window.location.href='{% url 'view_user_profile' user.email%}'" />
   </div>
 </nav>
 <h2 class="text-center">Search Results</h2>
@@ -49,7 +50,7 @@
   <div class="card-body">
     <p class="card-text"><b>{{user.name}}</b></p>
     <div style="margin-left: 25%;">
-      <button class="btn" style="color:white; background-color:#211CA8;">View Profile</button>
+      <button class="btn" style="color:white; background-color:#211CA8;"onclick="window.location.href='{% url 'view_profile' user.email%}'">View Profile</button>
     <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'add_friend' user.email%}'">Add Friend</button>
     </div>
     

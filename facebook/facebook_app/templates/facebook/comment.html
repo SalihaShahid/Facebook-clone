@@ -34,6 +34,7 @@
         <a class="nav-link" href="{%url 'logout'%}" style="color:white;">Logout</a>
       </li>
     </ul>
+    <img src="{{user.profile_picture.url}}" style="width:45px;height:45px;border-radius:30px;" onclick="window.location.href='{% url 'view_user_profile' user.email%}'" />
   </div>
 </nav>
 <h2 class="text-center">Comments</h2>
@@ -47,7 +48,7 @@
     </div>
   </div>
   {%endfor%}
-<div style="padding-left: 10%;padding-right: 10%;">
+<div style="width: 50rem;margin-left: 20%;margin-top: 15px;">
     <form method="POST" enctype="multipart/form-data">
     {% csrf_token %} {{form | crispy}}
     <button type="submit" class="btn" style="width: 50%; background-color: #211CA8; color: white; margin-left: 25%;margin-top:2%;">Post</button>

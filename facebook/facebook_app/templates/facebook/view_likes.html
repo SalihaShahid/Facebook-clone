@@ -34,13 +34,14 @@
         <a class="nav-link" href="{%url 'logout'%}" style="color:white;">Logout</a>
       </li>
     </ul>
+    <img src="{{user.profile_picture.url}}" style="width:45px;height:45px;border-radius:30px;" onclick="window.location.href='{% url 'view_user_profile' user.email%}'" />
   </div>
 </nav>
 <h2 class="text-center">Likes</h2>
 {%for like in likes%}
 <div class="card" style="width: 50rem;margin-left: 20%;">
   <div class="card-body">
-    <h5 style="color:#211CA8"><img src="{{like.friend.profile_picture.url}}" style="width:70px;height: 70px;border-radius: 35px;margin-right: 10px;"><b>{{like.friend.name}}</b></h5><hr>
+    <h5 style="color:#211CA8"><img src="{{like.friend.profile_picture.url}}" style="width:70px;height: 70px;border-radius: 35px;margin-right: 10px;"><b>{{like.friend.name}}</b></h5>
   <div>
   </div>
     </div>

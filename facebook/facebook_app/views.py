@@ -10,6 +10,7 @@ import string
 import bcrypt
 from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
+from datetime import datetime
 
 # Create your views here.
 
@@ -68,6 +69,8 @@ def authenticate(request,email):
 				user.verification_status=True
 				user.save()
 				return redirect('login')
+			else:
+				return redirect('authenticate',email)
 	else:
 		form=AuthenticationForm()
 	return render(request,'facebook/authenticate.html',{'form':form})
@@ -81,12 +84,15 @@ def login(request):
 			email=form.cleaned_data['email']
 			password=form.cleaned_data['password']
 			user=User.objects.get(email=email)
-			user_password=user.password.encode('utf-8')
-			if bcrypt.checkpw(password.encode('utf-8'), user_password):
-				request.session['user_email'] = email
-				return redirect('home')
+			if user.verification_status==True:
+				user_password=user.password.encode('utf-8')
+				if bcrypt.checkpw(password.encode('utf-8'), user_password):
+					request.session['user_email'] = email
+					return redirect('home')
+				else:
+					return render(request,'facebook/login.html',{'form':form})
 			else:
-				print("Invalid password")
+				return redirect('authenticate',user.email)
 
 	else:
 		form=LoginForm()
@@ -95,6 +101,8 @@ def login(request):
 
 
 def search(request):
+	current_user=request.session.get('user_email')
+	user=User.objects.get(email=current_user)
 	users={}
 	if request.method=='POST':
 		form=SearchForm(request.POST)
@@ -105,7 +113,7 @@ def search(request):
 	else:
 		form=SearchForm()
 
-	return render(request,'facebook/search.html',{'form':form,'users':users})
+	return render(request,'facebook/search.html',{'form':form,'users':users,'user':user})
 
 
 def add_friend(request,email):
@@ -116,12 +124,13 @@ def add_friend(request,email):
 		user_email=user.email,
 		friend_email=friend_email)
 	friend_request.save()
-	return HttpResponse("request sent:)")
+	return redirect('add_friend')
 
 
 
 def view_requests(request):
 	current_user=request.session.get('user_email')
+	user=User.objects.get(email=current_user)
 	requests=FriendRequests.objects.filter(friend_email=current_user)
 	email_ids=[]
 	for req in requests:
@@ -131,7 +140,7 @@ def view_requests(request):
 	for email_id in email_ids:
 		users.append(User.objects.get(email=email_id))
 
-	return render(request,'facebook/view_requests.html',{'users':users})
+	return render(request,'facebook/view_requests.html',{'users':users,'user':user})
 
 
 
@@ -156,6 +165,7 @@ def reject_request(request,email):
 
 def view_friends(request):
 	current_user=request.session.get('user_email')
+	user=User.objects.get(email=current_user)
 	friends=FriendRequests.objects.filter(Q(user_email=current_user)|Q(friend_email=current_user))
 
 	email_ids=[]
@@ -169,12 +179,20 @@ def view_friends(request):
 	for email_id in email_ids:
 		users.append(User.objects.get(email=email_id))
 
-	return render(request,'facebook/view_friends.html',{'users':users})
+	return render(request,'facebook/view_friends.html',{'users':users,'user':user})
 
 
 def view_profile(request,email):
+	current_user=request.session.get('user_email')
+	current_user=User.objects.get(email=current_user)
 	user=User.objects.filter(email=email)
-	return render(request,'facebook/view_profile.html',{'users':user})
+	return render(request,'facebook/view_profile.html',{'users':user,'user':current_user})
+
+def view_user_profile(request,email):
+	current_user=request.session.get('user_email')
+	current_user=User.objects.get(email=current_user)
+	user=User.objects.filter(email=email)
+	return render(request,'facebook/user_profile.html',{'users':user,'user':current_user})
 
 
 
@@ -198,8 +216,9 @@ def chat(request,email):
 		form=ChatForm(request.POST)
 		if form.is_valid():
 			message=form.cleaned_data['message']
-			msg=Message(sender=user,receiver=email,message=message,time=timezone.now())
+			msg=Message(sender=user,receiver=email,message=message,time=datetime.now())
 			msg.save()
+			return redirect('chat',email)
 	else:
 		form=ChatForm()
 	return render(request,'facebook/chat.html',{'messages':messages,'form':form,'sent':sent,'received':received,'friend':friend,'sender':sender})
@@ -216,12 +235,14 @@ def text_post(request):
 		if form.is_valid():
 			post=TextPost(
 				author=user,
-				content=form.cleaned_data['content']
+				content=form.cleaned_data['content'],
+				time=datetime.now()
 				)
 			post.save()
+			return redirect('your_posts')
 	else:
 		form=TextPostForm()
-	return render(request,'facebook/create_text_post.html',{'form':form,'post':post})
+	return render(request,'facebook/create_text_post.html',{'form':form,'post':post,'user':user})
 
 def media_post(request):
 	user=request.session.get('user_email')
@@ -233,12 +254,14 @@ def media_post(request):
 			post=MediaPost(
 				author=user,
 				content=form.cleaned_data['content'],
-				caption=form.cleaned_data['caption']
+				caption=form.cleaned_data['caption'],
+				time=datetime.now()
 				)
 			post.save()
+			return redirect('your_posts')
 	else:
 		form=MediaPostForm()
-	return render(request,'facebook/create_media_post.html',{'form':form,'post':post})
+	return render(request,'facebook/create_media_post.html',{'form':form,'post':post,'user':user})
 
 
 def your_posts(request):
@@ -248,7 +271,7 @@ def your_posts(request):
 	media_posts=MediaPost.objects.filter(author=user)
 	combined_posts=list(text_posts)+list(media_posts)
 	combined_posts=sorted(combined_posts,key=lambda post: post.time)
-	return render(request,"facebook/your_posts.html",{'text_posts':text_posts,'media_posts':media_posts,'combined_posts':combined_posts})
+	return render(request,"facebook/your_posts.html",{'text_posts':text_posts,'media_posts':media_posts,'combined_posts':combined_posts,'user':user})
 
 
 def home(request):
@@ -274,7 +297,7 @@ def home(request):
 		media_posts=MediaPost.objects.filter(author=friend)
 	combined_posts=list(text_posts)+list(media_posts)
 	combined_posts=sorted(combined_posts,key=lambda post: post.time)
-	return render(request,"facebook/home.html",{'text_posts':text_posts,'media_posts':media_posts,'combined_posts':combined_posts})
+	return render(request,"facebook/home.html",{'text_posts':text_posts,'media_posts':media_posts,'combined_posts':combined_posts,'user':user})
 
 
 def text_post_like(request,id):
@@ -287,7 +310,7 @@ def text_post_like(request,id):
 		content_type=ContentType.objects.get_for_model(post),
 		object_id=id)
 	like.save()
-	return HttpResponse("Liked:)")
+	return redirect('home')
 
 def media_post_like(request,id):
 	current_user=request.session.get('user_email')
@@ -299,10 +322,9 @@ def media_post_like(request,id):
 		content_type=ContentType.objects.get_for_model(post),
 		object_id=id)
 	like.save()
-	return HttpResponse("Liked:)")
+	return redirect('home')
 
-def text_post_comment(request,id):
-	
+def text_post_comment(request,id):	
 	current_user=request.session.get('user_email')
 	user=User.objects.get(email=current_user)
 	post=TextPost.objects.get(id=id)
@@ -314,17 +336,17 @@ def text_post_comment(request,id):
 				author=user,
 				post=post,
 				comment=form.cleaned_data['comment'],
+				time=datetime.now(),
 				content_type=ContentType.objects.get_for_model(post),
 				object_id=id
 				)
 			comment.save()
 	else:
 		form=CommentForm()
-	return render(request,'facebook/comment.html',{'form':form,'comments':text_post_comments})
+	return render(request,'facebook/comment.html',{'form':form,'comments':text_post_comments,'user':user})
 
 
 def media_post_comment(request,id):
-	
 	current_user=request.session.get('user_email')
 	user=User.objects.get(email=current_user)
 	post=MediaPost.objects.get(id=id)
@@ -336,13 +358,14 @@ def media_post_comment(request,id):
 				author=user,
 				post=post,
 				comment=form.cleaned_data['comment'],
+				time=datetime.now(),
 				content_type=ContentType.objects.get_for_model(post),
 				object_id=id
 				)
 			comment.save()
 	else:
 		form=CommentForm()
-	return render(request,'facebook/comment.html',{'form':form,'comments':text_post_comments})
+	return render(request,'facebook/comment.html',{'form':form,'comments':text_post_comments,'user':user})
 
 
 def view_text_comments(request,id):
@@ -350,14 +373,14 @@ def view_text_comments(request,id):
 	user=User.objects.get(email=current_user)
 	post=TextPost.objects.get(id=id)
 	text_post_comments=post.comments.all()
-	return render(request,'facebook/view_comments.html',{'comments':text_post_comments})
+	return render(request,'facebook/view_comments.html',{'comments':text_post_comments,'user':user})
 
 def view_media_comments(request,id):
 	current_user=request.session.get('user_email')
 	user=User.objects.get(email=current_user)
 	post=MediaPost.objects.get(id=id)
 	media_post_comments=post.comments.all()
-	return render(request,'facebook/view_comments.html',{'comments':media_post_comments})
+	return render(request,'facebook/view_comments.html',{'comments':media_post_comments,'user':user})
 
 
 def view_text_likes(request,id):
@@ -365,11 +388,14 @@ def view_text_likes(request,id):
 	user=User.objects.get(email=current_user)
 	post=TextPost.objects.get(id=id)
 	text_post_likes=post.likes.all()
-	return render(request,'facebook/view_likes.html',{'likes':text_post_likes})
+	return render(request,'facebook/view_likes.html',{'likes':text_post_likes,'user':user})
 
 def view_media_likes(request,id):
 	current_user=request.session.get('user_email')
 	user=User.objects.get(email=current_user)
 	post=MediaPost.objects.get(id=id)
 	media_post_likes=post.likes.all()
-	return render(request,'facebook/view_likes.html',{'likes':media_post_likes})
+	return render(request,'facebook/view_likes.html',{'likes':media_post_likes,'user':user})
+
+
+
