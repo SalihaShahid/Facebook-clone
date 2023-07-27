@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.test import SimpleTestCase
 from .models import *
-from datetime import date,datetime
+from datetime import date, datetime
 from django.utils import timezone
+
 
 # Create your tests here.
 class UserModelTests(TestCase):
@@ -41,7 +42,6 @@ class UserModelTests(TestCase):
         user = User.objects.get(email="f200147@cfd.nu.edu.pk")
         self.assertEqual(user.verification_status, True)
 
-
     def test_user_incorrect_name(self):
         user = User.objects.get(email="f200147@cfd.nu.edu.pk")
         self.assertNotEqual(user.name, "Nobita")
@@ -67,65 +67,69 @@ class UserModelTests(TestCase):
         self.assertNotEqual(user.verification_status, False)
 
 
-
-
-
 class FriendRequestModelTest(TestCase):
     def setUp(self):
         FriendRequests.objects.create(
             user_email="f200147@cfd.nu.edu.pk",
             friend_email="salihashahid1102@gmail.com",
-            approval_status=True)
+            approval_status=True,
+        )
+
     def test_user_email(self):
-        user=FriendRequests.objects.get(user_email="f200147@cfd.nu.edu.pk")
-        self.assertEqual(user.user_email,"f200147@cfd.nu.edu.pk")
+        user = FriendRequests.objects.get(user_email="f200147@cfd.nu.edu.pk")
+        self.assertEqual(user.user_email, "f200147@cfd.nu.edu.pk")
 
     def test_friend_email(self):
-        user=FriendRequests.objects.get(user_email="f200147@cfd.nu.edu.pk")
-        self.assertEqual(user.friend_email,"salihashahid1102@gmail.com")
+        user = FriendRequests.objects.get(user_email="f200147@cfd.nu.edu.pk")
+        self.assertEqual(user.friend_email, "salihashahid1102@gmail.com")
 
     def test_approval_status(self):
-        user=FriendRequests.objects.get(user_email="f200147@cfd.nu.edu.pk")
-        self.assertEqual(user.approval_status,True)
+        user = FriendRequests.objects.get(user_email="f200147@cfd.nu.edu.pk")
+        self.assertEqual(user.approval_status, True)
 
 
 class MessageModelTest(TestCase):
     def setUp(self):
-        message=Message.objects.create(
+        message = Message.objects.create(
             sender="f200147@cfd.nu.edu.pk",
             receiver="salihashahid1102@gmail.com",
             message="hello",
-            time=timezone.datetime(2023, 7, 26, 9, 37, 48, 879083, tzinfo=timezone.utc))
+            time=timezone.datetime(2023, 7, 26, 9, 37, 48, 879083, tzinfo=timezone.utc),
+        )
+
     def test_sender_email(self):
-        message=Message.objects.get(sender="f200147@cfd.nu.edu.pk")
-        self.assertEqual(message.sender,"f200147@cfd.nu.edu.pk")
+        message = Message.objects.get(sender="f200147@cfd.nu.edu.pk")
+        self.assertEqual(message.sender, "f200147@cfd.nu.edu.pk")
 
     def test_receiver_email(self):
-        message=Message.objects.get(sender="f200147@cfd.nu.edu.pk")
-        self.assertEqual(message.receiver,"salihashahid1102@gmail.com")
+        message = Message.objects.get(sender="f200147@cfd.nu.edu.pk")
+        self.assertEqual(message.receiver, "salihashahid1102@gmail.com")
 
     def test_message(self):
-        message=Message.objects.get(sender="f200147@cfd.nu.edu.pk")
-        self.assertEqual(message.message,"hello")
+        message = Message.objects.get(sender="f200147@cfd.nu.edu.pk")
+        self.assertEqual(message.message, "hello")
 
     def test_time(self):
-        message=Message.objects.get(sender="f200147@cfd.nu.edu.pk")
-        self.assertEqual(message.time,timezone.datetime(2023, 7, 26, 9, 37, 48, 879083, tzinfo=timezone.utc))
+        message = Message.objects.get(sender="f200147@cfd.nu.edu.pk")
+        self.assertEqual(
+            message.time,
+            timezone.datetime(2023, 7, 26, 9, 37, 48, 879083, tzinfo=timezone.utc),
+        )
 
 
 class TestStausCodes(SimpleTestCase):
     def test_sign_up(self):
-        response=self.client.get("/signup")
-        self.assertEqual(response.status_code,200)
+        response = self.client.get("/signup")
+        self.assertEqual(response.status_code, 200)
+
     def test_authenticate(self):
-        response=self.client.get("/authenticatef200147@cfd.nu.edu.pk")
-        self.assertEqual(response.status_code,200)
+        response = self.client.get("/authenticatef200147@cfd.nu.edu.pk")
+        self.assertEqual(response.status_code, 200)
+
     def test_login(self):
-        response=self.client.get("/login")
-        self.assertEqual(response.status_code,200)
+        response = self.client.get("/login")
+        self.assertEqual(response.status_code, 200)
+
     def test_search(self):
-        response=self.client.get("/search")
-        self.assertEqual(response.status_code,200)
-
-
-
+        response = self.client.get("/search")
+        self.assertEqual(response.status_code, 200)

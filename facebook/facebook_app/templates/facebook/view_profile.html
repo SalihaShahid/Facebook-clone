@@ -1,59 +1,60 @@
-{% load crispy_forms_tags %}
-{%load static%}
+  {% load crispy_forms_tags %}
+  {%load static%}
 
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<title>Facebook-Profile</title>
-</head>
-<body style="background-color: #DDDDE6;">
-	<nav class="navbar navbar-expand-lg" style="background-color: #211CA8;">
-  <h1 class="navbar-brand text-light"><b>facebook</b></h1>
+  <!DOCTYPE html>
+  <html>
+  <head>
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  	<title>Facebook-Profile</title>
+  </head>
+  <body style="background-color: #DDDDE6;">
+  	<nav class="navbar navbar-expand-lg" style="background-color: #211CA8;">
+    <h1 class="navbar-brand text-light"><b>facebook</b></h1>
 
-  <div class="collapse navbar-collapse">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item" style="border-radius:4px ;">
-        <a class="nav-link" href="{%url 'home'%}" style="color:#211CA8;">Home</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{%url 'view_friends'%}" style="color:white;">Friends</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{%url 'your_posts'%}" style="color:white;">Your Posts</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{%url 'view_requests'%}" style="color:white;">View Requests</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{%url 'search'%}" style="color:white;">Search</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{%url 'logout'%}" style="color:white;">Logout</a>
-      </li>
-    </ul>
-    <img src="{{user.profile_picture.url}}" style="width:45px;height:45px;border-radius:30px;" onclick="window.location.href='{% url 'view_user_profile' user.email%}'" />
-  </div>
-</nav>
-<h2 class="text-center">Profile</h2>
-{%for user in users%}
-<div class="card" style="width: 30rem; margin-left:30%;margin-top: 2%;margin-bottom: 2%;">
-  <img class="card-img-top" src="{{user.profile_picture.url}}" alt="Image not found" style="height: 25rem;">
-  <div class="card-body">
-    <p class="card-text"><b>Name: <span style="color:#211CA8; ">{{user.name}}</span></b></p>
-    <p class="card-text"><b>Email: </b>{{user.email}}</p>
-    <p class="card-text"><b>Date of Birth: </b>{{user.date_of_birth}}</p>
-    <p class="card-text"><b>Gender: </b>{{user.gender}}</p>
-    <div style="margin-left: 35%;">
-      
-    <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'chat' user.email%}'">Send Message</button>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item" style="border-radius:4px ;">
+          <a class="nav-link" href="{%url 'home'%}" style="color:#211CA8;">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{%url 'view_friends'%}" style="color:white;">Friends</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{%url 'your_posts'%}" style="color:white;">Your Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{%url 'view_requests'%}" style="color:white;">View Requests</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{%url 'search'%}" style="color:white;">Search</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{%url 'logout'%}" style="color:white;">Logout</a>
+        </li>
+      </ul>
+      <img src="{{user.profile_picture.url}}" style="width:45px;height:45px;border-radius:30px;" onclick="window.location.href='{% url 'view_user_profile' user.email%}'" />
     </div>
-    
+  </nav>
+  <h2 class="text-center">Profile</h2>
+  {%for user in users%}
+  <div class="card" style="width: 30rem; margin-left:30%;margin-top: 2%;margin-bottom: 2%;">
+    <img class="card-img-top" src="{{user.profile_picture.url}}" alt="Image not found" style="height: 25rem;">
+    <div class="card-body">
+      <p class="card-text"><b>Name: <span style="color:#211CA8; ">{{user.name}}</span></b></p>
+      <p class="card-text"><b>Email: </b>{{user.email}}</p>
+      <p class="card-text"><b>Date of Birth: </b>{{user.date_of_birth}}</p>
+      <p class="card-text"><b>Gender: </b>{{user.gender}}</p>
+      <div style="margin-left: 23%;">
+        
+      <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'chat' user.email%}'">Send Message</button>
+      <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'view_story' user.email%}'">View Story</button>
+      </div>
+      
+    </div>
   </div>
-</div>
-{%endfor%}
-</body>
+  {%endfor%}
+  </body>
 
-</html>
+  </html>

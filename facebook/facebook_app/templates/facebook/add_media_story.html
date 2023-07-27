@@ -1,10 +1,13 @@
+  {% load crispy_forms_tags %}
+  {%load static%}
+
   <!DOCTYPE html>
   <html>
   <head>
   	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
   	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  	<title>Facebook-Friends</title>
+  	<title>Facebook-Create Story</title>
   </head>
   <body style="background-color: #DDDDE6;">
   	<nav class="navbar navbar-expand-lg" style="background-color: #211CA8;">
@@ -12,11 +15,11 @@
 
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item " style="">
+        <li class="nav-item" style="border-radius:4px ;">
           <a class="nav-link" href="{%url 'home'%}" style="color:#211CA8;">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active bg-light" href="{%url 'view_friends'%}" style="color:white;border-radius:4px;">Friends</a>
+          <a class="nav-link" href="{%url 'view_friends'%}" style="color:white;">Friends</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{%url 'your_posts'%}" style="color:white;">Your Posts</a>
@@ -31,18 +34,16 @@
           <a class="nav-link" href="{%url 'logout'%}" style="color:white;">Logout</a>
         </li>
       </ul>
+      <img src="{{user.profile_picture.url}}" style="width:45px;height:45px;border-radius:30px;" onclick="window.location.href='{% url 'view_user_profile' user.email%}'" />
     </div>
   </nav>
-
-  <div style="background-color:white; width: 100%; margin-left:10%;margin-right: 10%;">
-    <div class="card" style="width: 18rem;">
-    <img class="card-img-top" src="">
-    <div class="card-body">
-      <p class="card-text">user.name</p>
+  <h2 class="text-center">Create Story</h2>
+  <div style="padding-left: 10%;padding-right: 10%;">
+      <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %} {{form | crispy}}
+      <button type="submit" class="btn" style="width: 50%; background-color: #211CA8; color: white; margin-left: 25%;margin-top:2%;">Post</button>
+    </form>
     </div>
-  </div>
-    
-  </div>
-
   </body>
+
   </html>
