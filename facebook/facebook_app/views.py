@@ -403,9 +403,16 @@ def update_profile(request):
 	email=request.session.get('user_email')
 	user=User.objects.get(email=email)
 	if request.method=='POST':
+
 		name=request.POST.get('name')
-		user.name=name
-		user.save()
+		profile_picture=request.FILES.get('picture')
+		if profile_picture:
+			user.profile_picture=profile_picture
+			user.save()
+		if name:
+			user.name=name
+			user.save()
+		
 
 	return redirect('view_user_profile',email)
 

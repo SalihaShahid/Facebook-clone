@@ -42,8 +42,12 @@
 <div class="card" style="width: 30rem; margin-left:30%;margin-top: 2%;margin-bottom: 2%;">
   <img class="card-img-top" src="{{user.profile_picture.url}}" alt="Image not found" style="height: 25rem;">
   <div class="card-body">
-    <form method="POST" action="{% url 'update_profile' %}">
+    <form method="POST" action="{% url 'update_profile' %}" enctype="multipart/form-data">
       {% csrf_token %}
+    <div class="custom-file">
+    <input type="file" class="custom-file-input" name="picture" accept="image/*">
+    <label class="custom-file-label" for="customFile">Update Profile Picture</label>
+  </div>
     <p class="card-text"><b>Name: <span style="color: #211CA8;">{{user.name}}</span></b><input type="text" class="form-control" name="name"></input></p>
     <p class="card-text"><b>Email: </b>{{user.email}}</p>
     <p class="card-text"><b>Date of Birth: </b>{{user.date_of_birth}}</p>
