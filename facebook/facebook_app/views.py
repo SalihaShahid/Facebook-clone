@@ -550,7 +550,7 @@ def text_story_like(request,id):
 		content_type=ContentType.objects.get_for_model(story),
 		object_id=id)
 	like.save()
-	return redirect('home')
+	return redirect('view_friends')
 
 def media_story_like(request,id):
 	current_user=request.session.get('user_email')
@@ -562,7 +562,7 @@ def media_story_like(request,id):
 		content_type=ContentType.objects.get_for_model(story),
 		object_id=id)
 	like.save()
-	return redirect('home')
+	return redirect('view_friends')
 
 
 def view_story(request,email):
