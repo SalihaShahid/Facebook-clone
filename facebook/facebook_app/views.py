@@ -540,7 +540,7 @@ def media_story_comment(request,id):
 	return render(request,'facebook/comment.html',{'form':form,'comments':media_story_comments,'user':user})
 
 
-def text_story_like(request,id):
+def text_story_like(request,id,email):
 	current_user=request.session.get('user_email')
 	user=User.objects.get(email=current_user)
 	story=TextStory.objects.get(id=id)
@@ -550,9 +550,9 @@ def text_story_like(request,id):
 		content_type=ContentType.objects.get_for_model(story),
 		object_id=id)
 	like.save()
-	return redirect('view_friends')
+	return redirect('view_story',email)
 
-def media_story_like(request,id):
+def media_story_like(request,id,email):
 	current_user=request.session.get('user_email')
 	user=User.objects.get(email=current_user)
 	story=MediaStory.objects.get(id=id)
@@ -562,7 +562,7 @@ def media_story_like(request,id):
 		content_type=ContentType.objects.get_for_model(story),
 		object_id=id)
 	like.save()
-	return redirect('view_friends')
+	return redirect('view_story',email)
 
 
 def view_story(request,email):

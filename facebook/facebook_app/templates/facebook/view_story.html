@@ -46,7 +46,7 @@
   <p>{{post.content}}</p>
   <label style="font-style: oblique;">{{post.time}}</label>
   <div>
-    <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'text_story_like' post.id%}'">Like</button>
+    <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'text_story_like' post.id post.author.email%}'">Like</button>
   <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'text_story_comment' post.id%}'">Comment</button>
   
     </div>
@@ -70,7 +70,7 @@
     <p class="card-text">{{post.caption}}</p>
     <label style="font-style: oblique;">{{post.time}}</label>
     <div>
-    <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'media_story_like' post.id%}'">Like</button>
+    <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'media_story_like' post.id post.author.email%}'">Like</button>
   <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'media_story_comment' post.id%}'">Comment</button>
   </div>
   </div>
