@@ -129,7 +129,7 @@ def add_friend(request, email):
     user = User.objects.get(email=current_user)
     friend_request = FriendRequests(user_email=user.email, friend_email=friend_email)
     friend_request.save()
-    return redirect("add_friend")
+    return redirect("search")
 
 
 def view_requests(request):
