@@ -416,3 +416,185 @@ def update_profile(request):
 
 	return redirect('view_user_profile',email)
 
+
+def text_story(request):
+	user=request.session.get('user_email')
+	post={}
+	user=User.objects.get(email=user)
+	print(user.name)
+	if request.method=='POST':
+		form=TextStoryForm(request.POST)
+		if form.is_valid():
+			post=TextStory(
+				author=user,
+				content=form.cleaned_data['content'],
+				time=datetime.now()
+				)
+			post.save()
+			return redirect('your_stories')
+	else:
+		form=TextPostForm()
+	return render(request,'facebook/add_text_story.html',{'form':form,'post':post,'user':user})
+
+
+def media_story(request):
+	user=request.session.get('user_email')
+	post={}
+	user=User.objects.get(email=user)
+	if request.method=='POST':
+		form=MediaStoryForm(request.POST,request.FILES)
+		if form.is_valid():
+			post=MediaStory(
+				author=user,
+				content=form.cleaned_data['content'],
+				caption=form.cleaned_data['caption'],
+				time=datetime.now()
+				)
+			post.save()
+			return redirect('your_stories')
+	else:
+		form=MediaPostForm()
+	return render(request,'facebook/add_media_story.html',{'form':form,'post':post,'user':user})
+
+
+def your_stories(request):
+	user=request.session.get('user_email')
+	user=User.objects.get(email=user)
+	text_posts=TextStory.objects.filter(author=user)
+	media_posts=MediaStory.objects.filter(author=user)
+	combined_posts=list(text_posts)+list(media_posts)
+	combined_posts=sorted(combined_posts,key=lambda post: post.time)
+	return render(request,"facebook/your_stories.html",{'text_posts':text_posts,'media_posts':media_posts,'combined_posts':combined_posts,'user':user})
+
+
+def view_text_story_comments(request,id):
+	current_user=request.session.get('user_email')
+	user=User.objects.get(email=current_user)
+	story=TextStory.objects.get(id=id)
+	text_story_comments=story.comments.all()
+	return render(request,'facebook/view_comments.html',{'comments':text_story_comments,'user':user})
+
+def view_media_story_comments(request,id):
+	current_user=request.session.get('user_email')
+	user=User.objects.get(email=current_user)
+	story=MediaStory.objects.get(id=id)
+	media_story_comments=story.comments.all()
+	return render(request,'facebook/view_comments.html',{'comments':media_story_comments,'user':user})
+
+
+def view_text_story_likes(request,id):
+	current_user=request.session.get('user_email')
+	user=User.objects.get(email=current_user)
+	story=TextStory.objects.get(id=id)
+	text_story_likes=story.likes.all()
+	return render(request,'facebook/view_likes.html',{'likes':text_story_likes,'user':user})
+
+def view_media_story_likes(request,id):
+	current_user=request.session.get('user_email')
+	user=User.objects.get(email=current_user)
+	story=MediaStory.objects.get(id=id)
+	media_story_likes=story.likes.all()
+	return render(request,'facebook/view_likes.html',{'likes':media_story_likes,'user':user})
+
+def text_story_comment(request,id):	
+	current_user=request.session.get('user_email')
+	user=User.objects.get(email=current_user)
+	story=TextStory.objects.get(id=id)
+	text_story_comments=story.comments.all()
+	if request.method=='POST':
+		form=CommentForm(request.POST)
+		if form.is_valid():
+			comment=TextStoryComment.objects.create(
+				author=user,
+				story=story,
+				comment=form.cleaned_data['comment'],
+				time=datetime.now(),
+				content_type=ContentType.objects.get_for_model(story),
+				object_id=id
+				)
+			comment.save()
+	else:
+		form=CommentForm()
+	return render(request,'facebook/comment.html',{'form':form,'comments':text_story_comments,'user':user})
+
+
+def media_story_comment(request,id):
+	current_user=request.session.get('user_email')
+	user=User.objects.get(email=current_user)
+	story=MediaStory.objects.get(id=id)
+	media_story_comments=story.comments.all()
+	if request.method=='POST':
+		form=CommentForm(request.POST)
+		if form.is_valid():
+			comment=MediaStoryComment.objects.create(
+				author=user,
+				story=story,
+				comment=form.cleaned_data['comment'],
+				time=datetime.now(),
+				content_type=ContentType.objects.get_for_model(story),
+				object_id=id
+				)
+			comment.save()
+	else:
+		form=CommentForm()
+	return render(request,'facebook/comment.html',{'form':form,'comments':media_story_comments,'user':user})
+
+
+def text_story_like(request,id):
+	current_user=request.session.get('user_email')
+	user=User.objects.get(email=current_user)
+	story=TextStory.objects.get(id=id)
+	like=TextStoryLike.objects.create(
+		friend=user,
+		story=story,
+		content_type=ContentType.objects.get_for_model(story),
+		object_id=id)
+	like.save()
+	return redirect('home')
+
+def media_story_like(request,id):
+	current_user=request.session.get('user_email')
+	user=User.objects.get(email=current_user)
+	story=MediaStory.objects.get(id=id)
+	like=MediaStoryLike.objects.create(
+		friend=user,
+		story=story,
+		content_type=ContentType.objects.get_for_model(story),
+		object_id=id)
+	like.save()
+	return redirect('home')
+
+
+def view_story(request,email):
+	user=request.session.get('user_email')
+	user=User.objects.get(email=user)
+	friend=User.objects.get(email=email)
+	text_posts=TextStory.objects.filter(author=friend)
+	media_posts=MediaStory.objects.filter(author=friend)
+	combined_posts=list(text_posts)+list(media_posts)
+	combined_posts=sorted(combined_posts,key=lambda post: post.time)
+	return render(request,"facebook/view_story.html",{'text_posts':text_posts,'media_posts':media_posts,'combined_posts':combined_posts,'user':user})
+
+def remove_text_story(request,id):
+	story=TextStory.objects.get(id=id)
+	story.delete()
+	user=request.session.get('user_email')
+	return redirect('your_stories')
+
+def remove_media_story(request,id):
+	story=MediaStory.objects.get(id=id)
+	story.delete()
+	user=request.session.get('user_email')
+	return redirect('your_stories')
+
+def remove_text_post(request,id):
+	post=TextPost.objects.get(id=id)
+	post.delete()
+	user=request.session.get('user_email')
+	return redirect('your_posts')
+
+def remove_media_post(request,id):
+	post=MediaPost.objects.get(id=id)
+	post.delete()
+	user=request.session.get('user_email')
+	return redirect('your_posts')

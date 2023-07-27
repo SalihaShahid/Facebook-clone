@@ -1,0 +1,83 @@
+{% load crispy_forms_tags %}
+{%load static%}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Facebook-Your Story</title>
+</head>
+<body style="background-color: #DDDDE6;">
+  <nav class="navbar navbar-expand-lg" style="background-color: #211CA8;">
+  <h1 class="navbar-brand text-light"><b>facebook</b></h1>
+
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" style="border-radius:4px ;">
+        <a class="nav-link" href="{%url 'home'%}" style="color:#211CA8;">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{%url 'view_friends'%}" style="color:white;">Friends</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{%url 'your_posts'%}" style="color:white;">Your Posts</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{%url 'view_requests'%}" style="color:white;">View Requests</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{%url 'search'%}" style="color:white;">Search</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{%url 'logout'%}" style="color:white;">Logout</a>
+      </li>
+    </ul>
+    <img src="{{user.profile_picture.url}}" style="width:45px;height:45px;border-radius:30px;" onclick="window.location.href='{% url 'view_user_profile' user.email%}'" />
+  </div>
+</nav>
+
+{%for post in combined_posts %}
+{%if post in text_posts%}
+<div class="card" style="width: 40rem;margin-left: 27%;">
+  <div class="card-body">
+    <h5><img src="{{post.author.profile_picture.url}}" style="width: 50px;height: 50px;border-radius:30px;margin-right: 20px;"/><b>{{post.author.name}}</b></h5><hr>
+  <p>{{post.content}}</p>
+  <label style="font-style: oblique;">{{post.time}}</label>
+  <div>
+    <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'text_story_like' post.id%}'">Like</button>
+  <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'text_story_comment' post.id%}'">Comment</button>
+  
+    </div>
+  
+    </div>
+  </div>
+  {%else%}
+
+<div class="card" style="width: 40rem;margin-left: 27%;">
+  <h5 style="padding:20px"><img src="{{post.author.profile_picture.url}}" style="width: 50px;height: 50px;border-radius:30px;margin-right: 20px;"/><b>{{post.author.name}}</b></h5>
+  {%if '.jpg' in post.content.url or '.jpeg' in post.content.url or '.png' in post.content.url%}
+  <img class="card-img-top" src="{{post.content.url}}">
+  {%else%}
+  <video>
+
+  <source src="{{post.content.url}}">
+  </video>
+  {%endif%}
+  <div class="card-body">
+    <h5 class="card-title">{{post.author.name}}</h5>
+    <p class="card-text">{{post.caption}}</p>
+    <label style="font-style: oblique;">{{post.time}}</label>
+    <div>
+    <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'media_story_like' post.id%}'">Like</button>
+  <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'media_story_comment' post.id%}'">Comment</button>
+  </div>
+  </div>
+</div>
+{%endif%}
+{%endfor%}
+
+</body>
+
+</html>

@@ -43,8 +43,9 @@
   <img class="card-img-top" src="{{user.profile_picture.url}}" alt="Image not found" style="height: 25rem;">
   <div class="card-body">
     <p class="card-text"><b>{{user.name}}</b></p>
-    <div style="margin-left: 20%;">
+    <div style="margin-left: 10%;">
       <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'view_profile' user.email%}'">View Profile</button>
+      <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'view_story' user.email%}'">View Story</button>
       <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'chat' user.email%}'">Send Message</button>
     </div>
     

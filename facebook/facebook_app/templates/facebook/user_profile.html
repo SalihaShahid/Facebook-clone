@@ -39,7 +39,7 @@
 </nav>
 <h2 class="text-center">Profile</h2>
 {%for user in users%}
-<div class="card" style="width: 30rem; margin-left:30%;margin-top: 2%;margin-bottom: 2%;">
+<div class="card" style="width: 35rem; margin-left:30%;margin-top: 2%;margin-bottom: 2%;">
   <img class="card-img-top" src="{{user.profile_picture.url}}" alt="Image not found" style="height: 25rem;">
   <div class="card-body">
     <form method="POST" action="{% url 'update_profile' %}" enctype="multipart/form-data">
@@ -53,8 +53,11 @@
     <p class="card-text"><b>Date of Birth: </b>{{user.date_of_birth}}</p>
     <p class="card-text"><b>Gender: </b>{{user.gender}}</p>
     
-    <div style="margin-left: 35%;">
-      <button class="btn" type="submit" style="color:white; background-color:#211CA8;">Update</button>
+    <div>
+      <button class="btn" type="submit" style="color:white; background-color:#211CA8;">Update Profile</button>
+      <button class="btn" type="button" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'text_story'%}'">Add Text Story</button>
+      <button class="btn" type="button" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'media_story'%}'">Add Media Story</button>
+      <button class="btn" type="button" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'your_stories'%}'">Your Story</button>
     </div>
     </form>
     </div>

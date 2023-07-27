@@ -92,3 +92,52 @@ class MediaLike(models.Model):
 	content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE)
 	object_id=models.PositiveIntegerField()
 	content_object = GenericForeignKey('content_type','object_id')
+
+class TextStory(models.Model):
+	author=models.ForeignKey(User,on_delete=models.CASCADE)
+	content=models.TextField()
+	time = models.DateTimeField()
+	comments=GenericRelation('TextStoryComment')
+	likes=GenericRelation('TextStoryLike')
+
+
+class MediaStory(models.Model):
+	author=models.ForeignKey(User,on_delete=models.CASCADE)
+	content=models.FileField(upload_to='media/posts/',validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png','gif','mp4'])])
+	caption=models.TextField(default="")
+	time = models.DateTimeField()
+	comments=GenericRelation('MediaStoryComment')
+	likes=GenericRelation('MediaStoryLike')
+
+class TextStoryComment(models.Model):
+	author=models.ForeignKey(User,on_delete=models.CASCADE)
+	story=models.ForeignKey(TextStory,on_delete=models.CASCADE)
+	comment=models.TextField()
+	content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE)
+	object_id=models.PositiveIntegerField()
+	time = models.DateTimeField()
+	content_object = GenericForeignKey('content_type','object_id')
+
+class MediaStoryComment(models.Model):
+	author=models.ForeignKey(User,on_delete=models.CASCADE)
+	story=models.ForeignKey(MediaStory,on_delete=models.CASCADE)
+	comment=models.TextField()
+	content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE)
+	object_id=models.PositiveIntegerField()
+	time = models.DateTimeField()
+	content_object = GenericForeignKey('content_type','object_id')
+
+
+class TextStoryLike(models.Model):
+	story=models.ForeignKey(TextStory,on_delete=models.CASCADE)
+	friend=models.ForeignKey(User,on_delete=models.CASCADE)
+	content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE)
+	object_id=models.PositiveIntegerField()
+	content_object = GenericForeignKey('content_type','object_id')
+
+class MediaStoryLike(models.Model):
+	story=models.ForeignKey(MediaStory,on_delete=models.CASCADE)
+	friend=models.ForeignKey(User,on_delete=models.CASCADE)
+	content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE)
+	object_id=models.PositiveIntegerField()
+	content_object = GenericForeignKey('content_type','object_id')

@@ -51,3 +51,9 @@ class MediaPostForm(forms.Form):
 class CommentForm(forms.Form):
     comment=forms.CharField()
 
+class TextStoryForm(forms.Form):
+    content=forms.CharField(label="")
+
+class MediaStoryForm(forms.Form):
+    content=forms.FileField(validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png','gif','mp4'])])
+    caption=forms.CharField(required=False)

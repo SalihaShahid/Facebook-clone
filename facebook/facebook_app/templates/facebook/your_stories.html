@@ -7,7 +7,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<title>Facebook-Your Posts</title>
+	<title>Facebook-Your Story</title>
 </head>
 <body style="background-color: #DDDDE6;">
 	<nav class="navbar navbar-expand-lg" style="background-color: #211CA8;">
@@ -15,17 +15,17 @@
 
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item " >
-        <a class="nav-link" href="{%url 'home'%}" style="color:white;">Home</a>
+      <li class="nav-item" style="border-radius:4px ;">
+        <a class="nav-link" href="{%url 'home'%}" style="color:#211CA8;">Home</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{%url 'view_friends'%}" style="color:white;">Friends</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link active bg-light" href="{%url 'your_posts'%}" style="color:#211CA8;border-radius:4px;">Your Posts</a>
+        <a class="nav-link" href="{%url 'your_posts'%}" style="color:white;">Your Posts</a>
       </li>
-      <li class="nav-item" style="">
-        <a class="nav-link " href="{%url 'view_requests'%}" style="color:white">View Requests</a>
+      <li class="nav-item">
+        <a class="nav-link" href="{%url 'view_requests'%}" style="color:white;">View Requests</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{%url 'search'%}" style="color:white;">Search</a>
@@ -37,18 +37,8 @@
     <img src="{{user.profile_picture.url}}" style="width:45px;height:45px;border-radius:30px;" onclick="window.location.href='{% url 'view_user_profile' user.email%}'" />
   </div>
 </nav>
-<h1 class="text-center">Your Posts</h1>
+<h1 class="text-center">Your Story</h1>
 
-<div class="card" style="width: 40rem;margin-left: 27%; margin-bottom: 10px;"> 
-  <div>
-    <button class="btn" style="color:white; background-color:#211CA8;width: 40rem;margin-bottom: 2px;" onclick="window.location.href='{% url 'text_post' %}'">Create Text Post</button>
-
-  <button class="btn" style="color:white; background-color:#211CA8;width: 40rem;" onclick="window.location.href='{% url 'media_post'%}'">Create Media Post</button>
-  
-    </div>
-  
-    
-  </div>
 {%for post in combined_posts %}
 {%if post in text_posts%}
 <div class="card" style="width: 40rem;margin-left: 27%;">
@@ -57,9 +47,9 @@
   <p>{{post.content}}</p>
   <label style="font-style: oblique;">{{post.time}}</label>
   <div>
-    <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'view_text_likes' post.id%}'">View Likes</button>
-  <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'view_text_comments' post.id%}'">View Comments</button>
-  <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'remove_text_post' post.id%}'">Remove</button>
+    <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'view_text_story_likes' post.id%}'">View Likes</button>
+  <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'view_text_story_comments' post.id%}'">View Comments</button>
+  <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'remove_text_story' post.id%}'">Remove</button>
   </div>
   
     </div>
@@ -83,9 +73,9 @@
     <p class="card-text">{{post.caption}}</p>
     <label style="font-style: oblique;">{{post.time}}</label>
     <div>
-    <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'view_media_likes' post.id%}'">View Likes</button>
-  <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'view_media_comments' post.id%}'">View Comments</button>
-  <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'remove_media_post' post.id%}'">Remove</button>
+    <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'view_media_story_likes' post.id%}'">View Likes</button>
+  <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'view_media_story_comments' post.id%}'">View Comments</button>
+  <button class="btn" style="color:white; background-color:#211CA8;" onclick="window.location.href='{% url 'remove_media_story' post.id%}'">Remove</button>
   </div>
   </div>
 </div>
