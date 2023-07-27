@@ -1,63 +1,63 @@
-{% load crispy_forms_tags %}
-{%load static%}
+  {% load crispy_forms_tags %}
+  {%load static%}
 
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<title>Facebook-Chat</title>
-</head>
-<body style="background-color: #DDDDE6;">
+  <!DOCTYPE html>
+  <html>
+  <head>
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<title>Facebook-Chat</title>
+  </head>
+  <body style="background-color: #DDDDE6;">
 
 
-<div style="width:100%;height:100%; background-color:#211CA8;margin-bottom: 10px;">
-  <div style="padding:10px;">
-    <h3 style="color:white;"><img src="{{friend.profile_picture.url}}"style="border-radius: 50px; padding-right: 4px; height:70px;width: 70px;margin-left: 2%; margin-right: 2%" onclick="window.location.href='{% url 'view_profile' friend.email%}'"/>
-    {{friend.name}} <i class="fa fa-close" style="color:white;margin-left: 75%;" onclick="window.location.href='{%url 'home'%}'"></i></h3>
+  <div style="width:100%;height:100%; background-color:#211CA8;margin-bottom: 10px;">
+    <div style="padding:10px;">
+      <h3 style="color:white;"><img src="{{friend.profile_picture.url}}"style="border-radius: 50px; padding-right: 4px; height:70px;width: 70px;margin-left: 2%; margin-right: 2%" onclick="window.location.href='{% url 'view_profile' friend.email%}'"/>
+      {{friend.name}} <i class="fa fa-close" style="color:white;margin-left: 75%;" onclick="window.location.href='{%url 'home'%}'"></i></h3>
+      
+    </div>
+
+    </div>
+    {%for message in messages%}
+    {%if message in sent%}
+  <div class="row-lg-12" style="width:100%">
+    <div >
+      <img src="{{sender.profile_picture.url}}"style="border-radius: 50px; margin-right: 1%; height:50px;width: 50px; float: right;margin-top: 2%;">
+    <div style="background-color:#211CA8;color: white;border-radius: 2px; margin-top: 4px; margin-bottom: 4px; width: 40%; float: right; margin-right: 2%;padding: 10px;">
+      <h5 style="color:white;"><b>{{sender.name}}</b></h5>
+      <p style="color:white;">{{message.message}}</p>
+      <label style="color:white; margin-left: 60%;font-style: oblique;">{{message.time}}</label>
+    </div>
     
-  </div>
+    </div>
+    </div>
+    <br><br><br><br><br><br>
 
-  </div>
-  {%for message in messages%}
-  {%if message in sent%}
-<div class="row-lg-12" style="width:100%">
-  <div >
-    <img src="{{sender.profile_picture.url}}"style="border-radius: 50px; margin-right: 1%; height:50px;width: 50px; float: right;margin-top: 2%;">
-  <div style="background-color:#211CA8;color: white;border-radius: 2px; margin-top: 4px; margin-bottom: 4px; width: 40%; float: right; margin-right: 2%;padding: 10px;">
-    <h5 style="color:white;"><b>{{sender.name}}</b></h5>
-    <p style="color:white;">{{message.message}}</p>
-    <label style="color:white; margin-left: 60%;font-style: oblique;">{{message.time}}</label>
-  </div>
-  
+    {%else%}
+    <div class="row-lg-12" style="width:100%">
+    <div >
+      <img src="{{friend.profile_picture.url}}"style="border-radius: 50px; margin-left: 1%; height:50px;width: 50px; margin-top: 20px;">
+    <div style="background-color:white;color: #211CA8;border-radius: 2px; margin-bottom: 4px; width: 40%; margin-left:3%;padding: 10px; float: left;">
+      <h5 style="color:#211CA8;"><b>{{friend.name}}</b></h5>
+      <p style="color:#211CA8;">{{message.message}}</p>
+      <p style="color:#211CA8;font-style: oblique;margin-left: 60%;">{{message.time}}</p>
+    </div>
+    
   </div>
   </div>
   <br><br><br><br><br><br>
-
-  {%else%}
-  <div class="row-lg-12" style="width:100%">
-  <div >
-    <img src="{{friend.profile_picture.url}}"style="border-radius: 50px; margin-left: 1%; height:50px;width: 50px; margin-top: 20px;">
-  <div style="background-color:white;color: #211CA8;border-radius: 2px; margin-bottom: 4px; width: 40%; margin-left:3%;padding: 10px; float: left;">
-    <h5 style="color:#211CA8;"><b>{{friend.name}}</b></h5>
-    <p style="color:#211CA8;">{{message.message}}</p>
-    <p style="color:#211CA8;font-style: oblique;margin-left: 60%;">{{message.time}}</p>
-  </div>
-  
-</div>
-</div>
-<br><br><br><br><br><br>
-{%endif%}
-{%endfor%}
-<form method="POST" style="bottom: 1px; margin-left:40%" class="form-inline">
-  {%csrf_token%}
-  {{form | crispy}}
-  <button class="btn" type="submit" style="background-color:#211CA8;color:white;"onclick="window.location.href='{% url 'chat' friend.email%}'">Send</button>
-</form>
+  {%endif%}
+  {%endfor%}
+  <form method="POST" style="bottom: 1px; margin-left:40%" class="form-inline">
+    {%csrf_token%}
+    {{form | crispy}}
+    <button class="btn" type="submit" style="background-color:#211CA8;color:white;"onclick="window.location.href='{% url 'chat' friend.email%}'">Send</button>
+  </form>
 
 
-</body>
+  </body>
 
-</html>
+  </html>

@@ -1,35 +1,35 @@
-{% load crispy_forms_tags %}
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<title>Facebook-Login</title>
-</head>
-<body style="background-color: #DDDDE6;">
-	<div style="background-color:#211CA8;">
-		<div class="row" style="padding:2%;">
-			<div class="col-8"><h1 style="color: white ;"><b>facebook</b></h1></div>
-			<div class="col">
-				<nav class="nav nav-pills nav-fill">
-  					
-  					<a class="nav-item nav-link text-light" href="{%url 'signup'%}" >Sign up</a>
-  					<a class="nav-item nav-link active bg-light" href="{%url 'login'%}" style="color: #211CA8;">Login</a>
-				</nav>
+	{% load crispy_forms_tags %}
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<title>Facebook-Login</title>
+	</head>
+	<body style="background-color: #DDDDE6;">
+		<div style="background-color:#211CA8;">
+			<div class="row" style="padding:2%;">
+				<div class="col-8"><h1 style="color: white ;"><b>facebook</b></h1></div>
+				<div class="col">
+					<nav class="nav nav-pills nav-fill">
+	  					
+	  					<a class="nav-item nav-link text-light" href="{%url 'signup'%}" >Sign up</a>
+	  					<a class="nav-item nav-link active bg-light" href="{%url 'login'%}" style="color: #211CA8;">Login</a>
+					</nav>
+				</div>
 			</div>
+			
+			
+		</div>
+		<h2 style="padding:2%;text-align: center;"><b>Login</b></h2>
+		<div style="padding-left: 10%;padding-right: 10%;">
+			<form method="POST" enctype="multipart/form-data">
+			{% csrf_token %} {{form | crispy}}
+			<button type="submit" class="btn" style="width: 50%; background-color: #211CA8; color: white; margin-left: 25%;margin-top:2%;">Login</button>
+		</form>
 		</div>
 		
-		
-	</div>
-	<h2 style="padding:2%;text-align: center;"><b>Login</b></h2>
-	<div style="padding-left: 10%;padding-right: 10%;">
-		<form method="POST" enctype="multipart/form-data">
-		{% csrf_token %} {{form | crispy}}
-		<button type="submit" class="btn" style="width: 50%; background-color: #211CA8; color: white; margin-left: 25%;margin-top:2%;">Login</button>
-	</form>
-	</div>
-	
 
-</body>
-</html>
+	</body>
+	</html>
